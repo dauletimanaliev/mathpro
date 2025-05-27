@@ -7,12 +7,12 @@ class VideoPlayerPage extends StatefulWidget {
   const VideoPlayerPage({super.key, required this.videoUrl});
 
   @override
-  // ignore: library_private_types_in_public_api
   _VideoPlayerPageState createState() => _VideoPlayerPageState();
 }
 
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
-  late YoutubePlayerController _controller;
+  YoutubePlayerController? _controller;
+  bool _isValidUrl = true;
 
   @override
   void initState() {
@@ -24,14 +24,29 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         initialVideoId: videoId,
         flags: const YoutubePlayerFlags(autoPlay: true),
       );
+    } else {
+      _isValidUrl = false;
     }
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Watching Video")),
-      body: YoutubePlayer(controller: _controller),
+      appBar: AppBar(title: const Text("Watching Video")),
+      body: _isValidUrl && _controller != null
+          ? YoutubePlayer(controller: _controller!)
+          : const Center(
+              child: Text(
+                "❌ Invalid video URL",
+                style: TextStyle(fontSize: 18, color: Colors.red),
+              ),
+            ),
     );
   }
 }

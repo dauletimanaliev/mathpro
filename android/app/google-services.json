@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "278405072217",
+    "project_id": "offermath-f4399",
+    "storage_bucket": "offermath-f4399.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278405072217:android:305092e9e4f6cc2737b848",
+        "android_client_info": {
+          "package_name": "com.example.offermath"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1VFZEGjAL24fK7XP18eqj3ZWGQKOJDcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
