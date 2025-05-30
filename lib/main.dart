@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:offermath/auth/loading_page.dart';
+
 import 'package:offermath/firebase_api.dart';
 import 'package:offermath/firebase_options.dart';
 import 'package:offermath/pages/mainpage.dart';
@@ -38,12 +38,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          home: courseName == null
-              ? LoadingPage(
-                  username: '',
-                  course: '',
-                )
-              : Mainpage(),
+          home: Mainpage(),
         );
       },
     );

@@ -122,10 +122,10 @@ class _AuthState extends State<Auth> {
         ),
       );
 
-      username.clear();
-      course.clear();
-      teacher.clear();
-      indCode.clear();
+      // username.clear();
+      // course.clear();
+      // teacher.clear();
+      // indCode.clear();
 
       return true;
     } catch (error) {

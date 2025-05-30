@@ -73,7 +73,7 @@ class _ProfileState extends State<Profile> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.username,
+                      widget.username.isNotEmpty ? widget.username : 'Аты жоқ',
                       style: TextStyle(
                           color: const Color.fromARGB(255, 0, 0, 0),
                           fontSize: 32.sp),
