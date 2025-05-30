@@ -17,7 +17,7 @@ class MainPageText {
   static const String helperText = 'For example: 2F-3 or 2F3';
   // teacher auth page
   static const String teacherName = 'Name';
-  static const String subject = 'Name';
+  static const String subject = 'Subject';
   static const String individualCodeTeacher =
       'Please enter your individual code';
   // loading page

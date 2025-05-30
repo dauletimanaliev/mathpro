@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:offermath/custom_widgets/custom_toggle_switch.dart';
-import 'package:offermath/generalpages/settings_details_page.dart';
+import 'package:offermath/mainpages/settings_details_page.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});

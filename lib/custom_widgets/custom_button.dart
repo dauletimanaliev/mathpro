@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:offermath/colors/main_colors.dart';
 
 class CustomButton extends StatefulWidget {
-  final VoidCallback page;
+  final VoidCallback? page;
   final String nameButton;
-  const CustomButton({super.key, required this.page, required this.nameButton});
+  const CustomButton({super.key, this.page, required this.nameButton});
 
   @override
   State<CustomButton> createState() => _CustomButtonState();

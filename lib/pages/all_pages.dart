@@ -2,9 +2,9 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offermath/colors/main_colors.dart';
-import 'package:offermath/generalpages/calculator.dart';
-import 'package:offermath/generalpages/homepage.dart';
-import 'package:offermath/generalpages/profile.dart';
+import 'package:offermath/mainpages/calculator.dart';
+import 'package:offermath/mainpages/homepage.dart';
+import 'package:offermath/mainpages/profile.dart';
 
 class AllPages extends StatefulWidget {
   final String username;
@@ -24,7 +24,6 @@ class _AllPagesState extends State<AllPages> {
       Calculator(),
       Homepage(),
       Profile(username: widget.username, course: widget.course),
-      
     ];
     return Scaffold(
       body: pages[currentIndex],

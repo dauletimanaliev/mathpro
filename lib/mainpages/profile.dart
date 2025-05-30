@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:offermath/generalpages/settings.dart';
+import 'package:offermath/mainpages/leaderboard.dart';
+import 'package:offermath/mainpages/settings.dart';
 import 'package:offermath/texts/main_page.dart';
 
 class Profile extends StatefulWidget {
@@ -125,7 +126,13 @@ class _ProfileState extends State<Profile> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [GrayContainer(), GrayContainer()],
-          )
+          ),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => LeaderboardPage()));
+              },
+              child: Text('data'))
         ],
       ),
     );

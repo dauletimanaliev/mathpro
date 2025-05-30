@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:offermath/background/main_background.dart';
 import 'package:offermath/custom_widgets/custom_button.dart';
 import 'package:offermath/custom_widgets/custom_formfield.dart';
 import 'package:offermath/auth/loading_page.dart';
+import 'package:offermath/services/firestore_service.dart';
 import 'package:offermath/texts/main_page.dart';
 
 class Auth extends StatefulWidget {
@@ -16,11 +18,16 @@ class Auth extends StatefulWidget {
 class _AuthState extends State<Auth> {
   final GlobalKey<FormState> studentKey = GlobalKey<FormState>();
   final GlobalKey<FormState> teacherKey = GlobalKey<FormState>();
-  // for students
+  final FirestoreService firestoreService = FirestoreService();
+
   final TextEditingController username = TextEditingController();
   final TextEditingController course = TextEditingController();
   final TextEditingController teacher = TextEditingController();
   final TextEditingController indCode = TextEditingController();
+
+  final TextEditingController teacherName = TextEditingController();
+  final TextEditingController subject = TextEditingController();
+  final TextEditingController teacherIndCode = TextEditingController();
 
   String? validateName(String? value) {
     if (value == null || value.trim().isEmpty) {
@@ -70,6 +77,119 @@ class _AuthState extends State<Auth> {
     return null;
   }
 
+  String? validateSubject(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Subject cannot be empty';
+    }
+    if (value.trim().length < 2) {
+      return 'Enter a valid subject';
+    }
+    return null;
+  }
+
+  Future<bool> saveUserData() async {
+    if (!studentKey.currentState!.validate()) return false;
+
+    try {
+      final userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('individualCode', isEqualTo: indCode.text.trim())
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('This individual code is already in use.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return false;
+      }
+
+      await FirebaseFirestore.instance.collection('users').add({
+        'type': 'student',
+        'name': username.text.trim(),
+        'course': course.text.trim(),
+        'teacher': teacher.text.trim(),
+        'individualCode': indCode.text.trim(),
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Succesful!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      username.clear();
+      course.clear();
+      teacher.clear();
+      indCode.clear();
+
+      return true;
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $error'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    }
+  }
+
+  Future<bool> saveTeacherData() async {
+    if (!teacherKey.currentState!.validate()) return false;
+
+    try {
+      await FirebaseFirestore.instance.collection('teachers').add({
+        'type': 'teacher',
+        'name': teacherName.text.trim(),
+        'subject': subject.text.trim(),
+        'individualCode': teacherIndCode.text.trim(),
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              "The teacher's data has been successfully saved in Firebase!"),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      teacherName.clear();
+      subject.clear();
+      teacherIndCode.clear();
+
+      return true;
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $error'),
+          backgroundColor: Colors.red,
+        ),
+      );
+
+      return false;
+    } finally {
+      setState(() {});
+    }
+  }
+
+  @override
+  void dispose() {
+    username.dispose();
+    course.dispose();
+    teacher.dispose();
+    indCode.dispose();
+    teacherName.dispose();
+    subject.dispose();
+    teacherIndCode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -79,9 +199,7 @@ class _AuthState extends State<Auth> {
           child: SafeArea(
             child: Column(
               children: [
-                SizedBox(
-                  height: 25.h,
-                ),
+                SizedBox(height: 25.h),
                 Text(
                   MainPageText.authentication,
                   style: TextStyle(
@@ -89,13 +207,9 @@ class _AuthState extends State<Auth> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(
-                  height: 20.h,
-                ),
+                SizedBox(height: 20.h),
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 40.sp,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 40.sp),
                   child: Container(
                     height: 42.h,
                     decoration: BoxDecoration(
@@ -127,9 +241,7 @@ class _AuthState extends State<Auth> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 5.h,
-                ),
+                SizedBox(height: 5.h),
                 Expanded(
                   child: TabBarView(
                     children: [
@@ -146,13 +258,9 @@ class _AuthState extends State<Auth> {
                                   style: TextStyle(fontSize: 20.sp),
                                 ),
                               ),
-                              // ! STUDENT'S FIRST TEXTFORMFIELD
                               CustomFormfield(
                                 controller: username,
                                 validator: validateName,
-                              ),
-                              SizedBox(
-                                height: 5.h,
                               ),
                               Padding(
                                 padding: EdgeInsets.only(left: 40.sp),
@@ -169,13 +277,9 @@ class _AuthState extends State<Auth> {
                                   style: TextStyle(fontSize: 20.sp),
                                 ),
                               ),
-                              // ! STUDENT'S SECOND TEXTFORMFIELD
                               CustomFormfield(
                                 controller: course,
                                 validator: validateCourse,
-                              ),
-                              SizedBox(
-                                height: 5.h,
                               ),
                               Padding(
                                 padding: EdgeInsets.only(left: 40.sp),
@@ -192,7 +296,6 @@ class _AuthState extends State<Auth> {
                                   style: TextStyle(fontSize: 20.sp),
                                 ),
                               ),
-                              // ! STUDENT'S THIRD TEXTFORMFIELD
                               CustomFormfield(
                                 controller: teacher,
                                 validator: validateTeacher,
@@ -204,19 +307,32 @@ class _AuthState extends State<Auth> {
                                   style: TextStyle(fontSize: 20.sp),
                                 ),
                               ),
-                              // ! STUDENT'S FORTH TEXTFORMFIELD
                               CustomFormfield(
                                 controller: indCode,
                                 validator: validateindCode,
                               ),
                               SizedBox(height: 60.h),
-                              // BUTTONNNNNNNNNNNNNNNNNNNNNNN
+                              CustomButton(
+                                page: () async {
+                                  final success = await saveUserData();
+                                  if (success) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => LoadingPage(
+                                          username: username.text,
+                                          course: course.text,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                                nameButton: MainPageText.authButton,
+                              ),
                             ],
                           ),
                         ),
                       ),
-                      // ! NEXT TABBAR
-
                       SingleChildScrollView(
                         child: Form(
                           key: teacherKey,
@@ -230,8 +346,10 @@ class _AuthState extends State<Auth> {
                                   style: TextStyle(fontSize: 20.sp),
                                 ),
                               ),
-                              //? TEACHER'S FIRST TEXTFORMFIELD
-                              CustomFormfield(),
+                              CustomFormfield(
+                                controller: teacherName,
+                                validator: validateName,
+                              ),
                               Padding(
                                 padding: EdgeInsets.all(20.0.sp),
                                 child: Text(
@@ -239,9 +357,10 @@ class _AuthState extends State<Auth> {
                                   style: TextStyle(fontSize: 20.sp),
                                 ),
                               ),
-
-                              //? TEACHER'S THIRD TEXTFORMFIELD
-                              CustomFormfield(),
+                              CustomFormfield(
+                                controller: subject,
+                                validator: validateSubject,
+                              ),
                               Padding(
                                 padding: EdgeInsets.all(20.0.sp),
                                 child: Text(
@@ -249,35 +368,34 @@ class _AuthState extends State<Auth> {
                                   style: TextStyle(fontSize: 20.sp),
                                 ),
                               ),
-
-                              // ! THIRD TEXTFORMFIELD
-                              CustomFormfield(),
-
-                              // BUTTONNNNNNNNNNNNNNNNNNNN
+                              CustomFormfield(
+                                controller: teacherIndCode,
+                                validator: validateindCode,
+                              ),
+                              SizedBox(height: 60.h),
+                              CustomButton(
+                                page: () async {
+                                  final success = await saveTeacherData();
+                                  if (success) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => LoadingPage(
+                                          username: username.text,
+                                          course: course.text,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                                nameButton: 'Register Teacher',
+                              ),
                             ],
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
-                CustomButton(
-                  page: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoadingPage(
-                          username: username.text,
-                          course: course.text,
-                        ),
-                      ),
-                    );
-                    if (studentKey.currentState!.validate()) {}
-                  },
-                  nameButton: MainPageText.authButton,
-                ),
-                SizedBox(
-                  height: 50.h,
                 ),
               ],
             ),

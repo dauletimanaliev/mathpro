@@ -1,0 +1,2 @@
+/Users/dauletimanaliev/Desktop/Projects/offermath/android/app/.cxx/Debug/s493c6d7/x86/CMakeFiles/edit_cache.dir
+/Users/dauletimanaliev/Desktop/Projects/offermath/android/app/.cxx/Debug/s493c6d7/x86/CMakeFiles/rebuild_cache.dir
