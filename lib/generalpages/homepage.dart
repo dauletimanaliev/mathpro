@@ -26,13 +26,27 @@ class _HomepageState extends State<Homepage> {
       "title": "Explaining Circle",
       "videoUrl": "https://youtu.be/EQC_tb4TB00",
       "thumbnail": "https://img.youtube.com/vi/EQC_tb4TB00/0.jpg"
+    },
+    {
+      "title": "Explaining Ellipse",
+      "videoUrl": "https://youtu.be/Dd6QnH2rMKI",
+      "thumbnail": "https://img.youtube.com/vi/Dd6QnH2rMKI/0.jpg"
+    },
+    {
+      "title": "Explaining Circle",
+      "videoUrl": "https://youtu.be/EQC_tb4TB00",
+      "thumbnail": "https://img.youtube.com/vi/EQC_tb4TB00/0.jpg"
+    },
+    {
+      "title": "Explaining Circle",
+      "videoUrl": "https://youtu.be/EQC_tb4TB00",
+      "thumbnail": "https://img.youtube.com/vi/EQC_tb4TB00/0.jpg"
     }
   ];
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -118,7 +132,7 @@ class _HomepageState extends State<Homepage> {
                 Text(
                   MainPageText.homePageTitleText,
                   style: TextStyle(
-                    fontSize: 48.sp,
+                    fontSize: 60.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -168,14 +182,187 @@ class _HomepageState extends State<Homepage> {
                         );
                       },
                       child: Container(
-                        padding: EdgeInsets.only(top: 0.sp, left: 15.sp),
+                        padding: EdgeInsets.only(left: 20.sp),
                         width: 400.w,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.r),
-                          child: Image.network(
-                            fit: BoxFit.cover,
-                            video["thumbnail"]!,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10.r),
+                              child: Image.network(
+                                video["thumbnail"]!,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              ),
+                            ),
+                            Positioned(
+                              top: 190.sp,
+                              bottom: 0,
+                              left: 215.sp,
+                              right: 0,
+                              child: Container(
+                                padding:
+                                    EdgeInsets.only(top: 5.sp, left: 30.sp),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20.r),
+                                    topRight: Radius.circular(0),
+                                    bottomRight: Radius.circular(10.r),
+                                  ),
+                                ),
+                                child: Text(
+                                  '14 lessons   6hr 36min',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              SizedBox(
+                height: 140.h,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: videos.length,
+                  itemBuilder: (context, index) {
+                    final video = videos[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VideoPlayerPage(
+                              videoUrl: video["videoUrl"]!,
+                            ),
                           ),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(left: 20.sp),
+                        width: 400.w,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10.r),
+                              child: Image.network(
+                                video["thumbnail"]!,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              ),
+                            ),
+                            Positioned(
+                              top: 190.sp,
+                              bottom: 0,
+                              left: 215.sp,
+                              right: 0,
+                              child: Container(
+                                padding:
+                                    EdgeInsets.only(top: 5.sp, left: 30.sp),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20.r),
+                                    topRight: Radius.circular(0),
+                                    bottomRight: Radius.circular(10.r),
+                                  ),
+                                ),
+                                child: Text(
+                                  '14 lessons   6hr 36min',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              SizedBox(
+                height: 140.h,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: videos.length,
+                  itemBuilder: (context, index) {
+                    final video = videos[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VideoPlayerPage(
+                              videoUrl: video["videoUrl"]!,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(left: 20.sp),
+                        width: 400.w,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10.r),
+                              child: Image.network(
+                                video["thumbnail"]!,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              ),
+                            ),
+                            Positioned(
+                              top: 190.sp,
+                              bottom: 0,
+                              left: 215.sp,
+                              right: 0,
+                              child: Container(
+                                padding:
+                                    EdgeInsets.only(top: 5.sp, left: 30.sp),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20.r),
+                                    topRight: Radius.circular(0),
+                                    bottomRight: Radius.circular(10.r),
+                                  ),
+                                ),
+                                child: Text(
+                                  '14 lessons   6hr 36min',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );

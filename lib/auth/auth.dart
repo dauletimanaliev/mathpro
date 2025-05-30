@@ -14,9 +14,61 @@ class Auth extends StatefulWidget {
 }
 
 class _AuthState extends State<Auth> {
-  final globalKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> studentKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> teacherKey = GlobalKey<FormState>();
+  // for students
   final TextEditingController username = TextEditingController();
   final TextEditingController course = TextEditingController();
+  final TextEditingController teacher = TextEditingController();
+  final TextEditingController indCode = TextEditingController();
+
+  String? validateName(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Name cannot be empty';
+    }
+    final parts = value.trim().split(' ');
+    if (parts.length < 2) {
+      return 'Please enter both first and last name';
+    }
+    final nameRegex = RegExp(r'^[A-Z][a-z]+$');
+    for (var part in parts) {
+      if (!nameRegex.hasMatch(part)) {
+        return 'Each part must start with a capital letter';
+      }
+    }
+    return null;
+  }
+
+  String? validateCourse(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Course cannot be empty';
+    }
+    final courseRegex = RegExp(r'^[1-9][A-Z]-[0-9]$');
+    if (!courseRegex.hasMatch(value.trim())) {
+      return 'Format must be like 2F-3';
+    }
+    return null;
+  }
+
+  String? validateTeacher(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Teacher cannot be empty';
+    }
+    if (value.trim().length < 2) {
+      return 'Enter a valid teacher name';
+    }
+    return null;
+  }
+
+  String? validateindCode(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'indCode cannot be empty';
+    }
+    if (value.trim().length < 4 || value.trim().length > 10) {
+      return 'indCode must be 4-10 characters';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +135,7 @@ class _AuthState extends State<Auth> {
                     children: [
                       SingleChildScrollView(
                         child: Form(
-                          key: globalKey,
+                          key: studentKey,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -97,6 +149,7 @@ class _AuthState extends State<Auth> {
                               // ! STUDENT'S FIRST TEXTFORMFIELD
                               CustomFormfield(
                                 controller: username,
+                                validator: validateName,
                               ),
                               SizedBox(
                                 height: 5.h,
@@ -119,6 +172,7 @@ class _AuthState extends State<Auth> {
                               // ! STUDENT'S SECOND TEXTFORMFIELD
                               CustomFormfield(
                                 controller: course,
+                                validator: validateCourse,
                               ),
                               SizedBox(
                                 height: 5.h,
@@ -139,7 +193,10 @@ class _AuthState extends State<Auth> {
                                 ),
                               ),
                               // ! STUDENT'S THIRD TEXTFORMFIELD
-                              CustomFormfield(),
+                              CustomFormfield(
+                                controller: teacher,
+                                validator: validateTeacher,
+                              ),
                               Padding(
                                 padding: EdgeInsets.all(20.0.sp),
                                 child: Text(
@@ -148,25 +205,12 @@ class _AuthState extends State<Auth> {
                                 ),
                               ),
                               // ! STUDENT'S FORTH TEXTFORMFIELD
-                              CustomFormfield(),
-                              SizedBox(
-                                height: 60.h,
+                              CustomFormfield(
+                                controller: indCode,
+                                validator: validateindCode,
                               ),
+                              SizedBox(height: 60.h),
                               // BUTTONNNNNNNNNNNNNNNNNNNNNNN
-                              CustomButton(
-                                page: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => LoadingPage(
-                                        username: username.text,
-                                        course: course.text,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                nameButton: MainPageText.authButton,
-                              ),
                             ],
                           ),
                         ),
@@ -174,61 +218,66 @@ class _AuthState extends State<Auth> {
                       // ! NEXT TABBAR
 
                       SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(20.0.sp),
-                              child: Text(
-                                MainPageText.teacherName,
-                                style: TextStyle(fontSize: 20.sp),
+                        child: Form(
+                          key: teacherKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(20.0.sp),
+                                child: Text(
+                                  MainPageText.teacherName,
+                                  style: TextStyle(fontSize: 20.sp),
+                                ),
                               ),
-                            ),
-                            //? TEACHER'S FIRST TEXTFORMFIELD
-                            CustomFormfield(),
-                            Padding(
-                              padding: EdgeInsets.all(20.0.sp),
-                              child: Text(
-                                MainPageText.subject,
-                                style: TextStyle(fontSize: 20.sp),
+                              //? TEACHER'S FIRST TEXTFORMFIELD
+                              CustomFormfield(),
+                              Padding(
+                                padding: EdgeInsets.all(20.0.sp),
+                                child: Text(
+                                  MainPageText.subject,
+                                  style: TextStyle(fontSize: 20.sp),
+                                ),
                               ),
-                            ),
 
-                            //? TEACHER'S THIRD TEXTFORMFIELD
-                            CustomFormfield(),
-                            Padding(
-                              padding: EdgeInsets.all(20.0.sp),
-                              child: Text(
-                                MainPageText.individualCodeTeacher,
-                                style: TextStyle(fontSize: 20.sp),
+                              //? TEACHER'S THIRD TEXTFORMFIELD
+                              CustomFormfield(),
+                              Padding(
+                                padding: EdgeInsets.all(20.0.sp),
+                                child: Text(
+                                  MainPageText.individualCodeTeacher,
+                                  style: TextStyle(fontSize: 20.sp),
+                                ),
                               ),
-                            ),
 
-                            // ! THIRD TEXTFORMFIELD
-                            CustomFormfield(),
-                            SizedBox(
-                              height: 145.h,
-                            ),
-                            // BUTTONNNNNNNNNNNNNNNNNNNN
-                            CustomButton(
-                              page: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => LoadingPage(
-                                      username: username.text,
-                                      course: course.text,
-                                    ),
-                                  ),
-                                );
-                              },
-                              nameButton: MainPageText.authButton,
-                            )
-                          ],
+                              // ! THIRD TEXTFORMFIELD
+                              CustomFormfield(),
+
+                              // BUTTONNNNNNNNNNNNNNNNNNNN
+                            ],
+                          ),
                         ),
                       ),
                     ],
                   ),
+                ),
+                CustomButton(
+                  page: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoadingPage(
+                          username: username.text,
+                          course: course.text,
+                        ),
+                      ),
+                    );
+                    if (studentKey.currentState!.validate()) {}
+                  },
+                  nameButton: MainPageText.authButton,
+                ),
+                SizedBox(
+                  height: 50.h,
                 ),
               ],
             ),

@@ -40,13 +40,13 @@ class _LoadingPageState extends State<LoadingPage> {
   }
 
   void _startSliderProgress() async {
-    int steps = 50; // count of steps
-    int duration = 5000 ~/ steps; // time between steps
+    int steps = 50;
+    int duration = 5000 ~/ steps;
 
     for (int i = 1; i <= steps; i++) {
       await Future.delayed(Duration(milliseconds: duration));
       setState(() {
-        _value = (_maxValue / steps) * i; // increasing value
+        _value = (_maxValue / steps) * i;
       });
     }
   }

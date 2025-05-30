@@ -30,7 +30,7 @@ class _MainpageState extends State<Mainpage> {
                 ),
               ),
               SizedBox(
-                height: 320.h,
+                height: 300.h,
               ),
               CustomButton(
                 nameButton: MainPageText.getStarted,
