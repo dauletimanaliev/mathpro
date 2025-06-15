@@ -1,0 +1,16 @@
+steps:
+  - name: 'gcr.io/cloud-builders/flutter'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        flutter pub get
+        flutter build web
+
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install', '-g', 'firebase-tools']
+
+  - name: 'gcr.io/cloud-builders/firebase'
+    args: ['deploy', '--project=offermath-f4399', '--only=hosting']
+
+timeout: 900s
